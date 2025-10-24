@@ -1,7 +1,12 @@
 from django.urls import path
 
-from . import views
+from .views import homePageView, addView, likeView, deleteView, loginView, logoutView
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', homePageView, name='index'),
+    path('add/', addView, name='add'),
+    path('like/<int:post_id>', likeView, name='like'),
+    path('delete/<int:post_id>', deleteView, name='delete'),
+    path('login/', loginView, name='login'),
+    path('logout/', logoutView, name='logout'),
 ]

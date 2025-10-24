@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+{% load static %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>BugFeed</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+
+<body>
+    <h1>BugFeed</h1>
+
+    <table>
+        <tr>
+            <th style="text-align:left">Username:
+            <td>{{user.username}}
+    </table>
+
+
+    <form action="logout/" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Logout" />
+    </form>
+
+    <h2>Your feed</h2>
+
+    <ul>
+        {% for post in posts %}
+
+        <li class="post">
+            <b>{{post.owner.username}}</b>: {{post.content}}<br>
+            Likes: {{ post.likes.count }}
+
+            {% if user == post.owner %}
+                <form action="{% url 'delete' post.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">
+                        Delete post
+                    </button>
+                </form>
+            {% endif %}
+            
+            <form action="{% url 'like' post.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">
+                    {% if user in post.likes.all %}
+                        Unlike
+                    {% else %}
+                        Like
+                    {% endif %}
+                </button>
+            </form>
+        </li>
+
+        {% endfor %}
+    </ul>
+
+
+    <h2>Create a new post</h2>
+
+    <form action="add/" method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="content" /><br />
+        <input type="submit" value="Send" />
+    </form>
+</body>
+
+
+</body>
+
+</html>
