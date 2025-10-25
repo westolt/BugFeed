@@ -29,13 +29,21 @@ def likeView(request, post_id):
 def deleteView(request, post_id):
     post = FeedItem.objects.get(id=post_id)
     
-    # FIX: add if condition
-    # if post.owner != request.user:
-    #      return HttpResponse('Access denied')
-    
     post.delete()
 
     return redirect('/')
+
+# HOW TO FIX "Broken Access Control":
+
+# def deleteView(request, post_id):
+#     post = FeedItem.objects.get(id=post_id)
+    
+#     if post.owner != request.user:
+#          return HttpResponse('Access denied')
+    
+#     post.delete()
+
+#     return redirect('/')
 
 def loginView(request):
     if request.method == 'POST':
@@ -48,6 +56,46 @@ def loginView(request):
         else:
             return HttpResponse('Invalid credentials')
     return render(request, 'pages/login.html')
+
+# A07:2021 – Identification and Authentication Failures
+def signupView(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        p1 = request.POST['password1']
+        p2 = request.POST['password2']
+
+        if p1 != p2:
+            return HttpResponse('Passwords are not the same!')
+        if User.objects.filter(username=username).exists():
+            return HttpResponse('Username already taken!')
+        
+        user = User.objects.create_user(username=username, password=p1)
+        login(request, user)
+        return redirect('/')
+    
+    return redirect('login')
+
+# HOW TO FIX "Identification and Authentication Failures":
+
+# def signupView(request):
+#     if request.method == 'POST':
+#         username = request.POST['username']
+#         p1 = request.POST['password1']
+#         p2 = request.POST['password2']
+
+#         if p1 != p2:
+#             return HttpResponse('Passwords are not the same!')
+#         if User.objects.filter(username=username).exists():
+#             return HttpResponse('Username already taken!')
+
+#         if len(p1) < 10 or p1.isalpha() or p1.isdigit() or p1.islower() or p1.isupper():
+#             return HttpResponse("Password too weak")
+#         else:
+#             user = User.objects.create_user(username=username, password=p1)
+#             login(request, user)
+#             return redirect('/')
+    
+#     return redirect('login')
 
 def logoutView(request):
 	logout(request)

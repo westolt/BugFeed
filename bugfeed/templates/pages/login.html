@@ -1,9 +1,35 @@
-<h2>Login</h2>
-<form method="post">
-    {% csrf_token %}
-    <label>Username:</label><br>
-    <input type="text" name="username"><br>
-    <label>Password:</label><br>
-    <input type="password" name="password"><br><br>
-    <button type="submit">Login</button>
-</form>
+<!DOCTYPE html>
+{% load static %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Login / Create account</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<!-- No csrf tokens used! -->
+<body>
+    <h2>Login:</h2>
+    <form action="{% url 'login' %}" method="post">
+        <!-- Fix: add token -->
+        <!-- {% csrf_token %} -->
+        <label>Username:</label><br>
+        <input type="text" name="username"><br>
+        <label>Password:</label><br>
+        <input type="password" name="password"><br><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <h3>Create an account:</h3>
+    <form action="{% url 'signup' %}" method="post">
+        <!-- Fix: add token -->
+        <!-- {% csrf_token %} -->
+        <label>Username:</label><br>
+        <input type="text" name="username"><br>
+        <label>Password:</label><br>
+        <input type="password" name="password1"><br>
+        <label>Confirm password:</label><br>
+        <input type="password" name="password2"><br><br>
+        <button type="submit">Create account</button>
+    </form>
+</body>
+</html>
