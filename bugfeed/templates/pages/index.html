@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
+<!-- No csrf tokens used! -->
 
 <body>
     <h1>BugFeed</h1>
@@ -19,7 +20,8 @@
 
 
     <form action="logout/" method="POST">
-        {% csrf_token %}
+        <!-- Fix: add token -->
+        <!-- {% csrf_token %} -->
         <input type="submit" value="Logout" />
     </form>
 
@@ -34,7 +36,8 @@
 
             {% if user == post.owner %}
                 <form action="{% url 'delete' post.id %}" method="POST">
-                    {% csrf_token %}
+                    <!-- Fix: add token -->
+                    <!-- {% csrf_token %} -->
                     <button type="submit">
                         Delete post
                     </button>
@@ -42,7 +45,8 @@
             {% endif %}
             
             <form action="{% url 'like' post.id %}" method="POST">
-                {% csrf_token %}
+                <!-- Fix: add token -->
+                <!-- {% csrf_token %} -->
                 <button type="submit">
                     {% if user in post.likes.all %}
                         Unlike
@@ -60,7 +64,8 @@
     <h2>Create a new post</h2>
 
     <form action="add/" method="POST">
-        {% csrf_token %}
+        <!-- Fix: add token -->
+        <!-- {% csrf_token %} -->
 
         <input type="text" name="content" /><br />
         <input type="submit" value="Send" />

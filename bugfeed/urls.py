@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import homePageView, addView, likeView, deleteView, loginView, logoutView
+from .views import homePageView, addView, likeView, deleteView, loginView, logoutView, infoView
 
 urlpatterns = [
     path('', homePageView, name='index'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('delete/<int:post_id>', deleteView, name='delete'),
     path('login/', loginView, name='login'),
     path('logout/', logoutView, name='logout'),
+    path('info/', infoView, name='info')
 ]

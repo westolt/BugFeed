@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
@@ -25,13 +25,15 @@ def likeView(request, post_id):
         post.likes.add(user)
     return redirect('/')
 
+# A01:2021-Broken Access Control
 def deleteView(request, post_id):
     post = FeedItem.objects.get(id=post_id)
-    user = request.user
     
-    if post.owner == user:
-         print(post)
-         post.delete()
+    # FIX: add if condition
+    # if post.owner != request.user:
+    #      return HttpResponse('Access denied')
+    
+    post.delete()
 
     return redirect('/')
 
@@ -50,3 +52,19 @@ def loginView(request):
 def logoutView(request):
 	logout(request)
 	return redirect('/login')
+
+def infoView(request):
+    posts = FeedItem.objects.all()
+    data = []
+    
+    for post in posts:
+        data.append({
+            'id': post.id,
+            'owner': post.owner.username,
+            'content': post.content,
+            'date': post.pub_date,
+            'likes_count': post.likes.count(),
+            'liked_by': [user.username for user in post.likes.all()],
+        })
+
+    return JsonResponse(data, safe=False)
