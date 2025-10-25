@@ -37,7 +37,7 @@
             {% if user == post.owner %}
                 <form action="{% url 'delete' post.id %}" method="POST">
                     <!-- Fix: add token -->
-                    {% csrf_token %}
+                    <!-- {% csrf_token %} -->
                     <button type="submit">
                         Delete post
                     </button>
