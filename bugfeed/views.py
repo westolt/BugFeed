@@ -100,19 +100,3 @@ def signupView(request):
 def logoutView(request):
 	logout(request)
 	return redirect('/login')
-
-def infoView(request):
-    posts = FeedItem.objects.all()
-    data = []
-    
-    for post in posts:
-        data.append({
-            'id': post.id,
-            'owner': post.owner.username,
-            'content': post.content,
-            'date': post.pub_date,
-            'likes_count': post.likes.count(),
-            'liked_by': [user.username for user in post.likes.all()],
-        })
-
-    return JsonResponse(data, safe=False)
