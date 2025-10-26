@@ -96,10 +96,9 @@ def signupView(request):
         if User.objects.filter(username=username).exists():
             return HttpResponse('Username already taken!')
         
-        user = User.objects.create_user(username=username, password=p1)
-        login(request, user)
-        return redirect('/')
-    
+        User.objects.create_user(username=username, password=p1)
+        return HttpResponse('User account created successfully!')
+
     return redirect('login')
 
 # HOW TO FIX "Identification and Authentication Failures":
