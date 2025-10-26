@@ -1,7 +1,9 @@
+from django.db import connection
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.hashers import check_password, make_password
 from .models import FeedItem
 
 def homePageView(request):
@@ -45,17 +47,42 @@ def deleteView(request, post_id):
 
 #     return redirect('/')
 
+# A03:2021 - Injection
 def loginView(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            return redirect('/')
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT id, username, password FROM auth_user WHERE username = '" + username + "'")
+            rows = cursor.fetchall()
+
+        if rows:
+            for row in rows:
+                user_id = row[0]
+                found_password = row[2]
+            
+                if check_password(password, found_password):
+                    user = User.objects.get(pk=user_id)
+                    login(request, user)
+                    return redirect('/')
         else:
-            return HttpResponse('Invalid credentials')
+            return HttpResponse('Invalid credentials', status=401)
     return render(request, 'pages/login.html')
+
+# HOW TO FIX "Injection":
+        
+# def loginView(request):
+#     if request.method == 'POST':
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(request, username=username, password=password)
+#         if user:
+#             login(request, user)
+#             return redirect('/')
+#         else:
+#             return HttpResponse('Invalid credentials')
+#     return render(request, 'pages/login.html')
+
 
 # A07:2021 – Identification and Authentication Failures
 def signupView(request):
