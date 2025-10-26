@@ -22,8 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-5*a2rd&)wh!@-&wn1dnch=t+)*+lj5ibdc%*1r-n=r7%_a+(1+'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# A05:2021-Security Misconfiguration
 DEBUG = True
+# FIX:
+# DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -40,11 +42,12 @@ INSTALLED_APPS = [
     'bugfeed.apps.BugfeedConfig',
 ]
 
-# CRSF missing
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+    # A05:2021-Security Misconfiguration
+    # 'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    # CSRF middleware missing
     # FIX: add this middleware
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

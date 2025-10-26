@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import check_password
 from .models import FeedItem
 
 def homePageView(request):
@@ -66,7 +66,7 @@ def loginView(request):
                     login(request, user)
                     return redirect('/')
         else:
-            return HttpResponse('Invalid credentials', status=401)
+            return HttpResponse('Invalid credentials')
     return render(request, 'pages/login.html')
 
 # HOW TO FIX "Injection":
